@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 Widget brandName() {
-  return Row(children: [
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
     Text(
       'Wall',
       style: TextStyle(

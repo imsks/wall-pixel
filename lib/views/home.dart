@@ -10,6 +10,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: brandName(),
         elevation: 0,
@@ -17,16 +18,24 @@ class _HomePageState extends State<HomePage> {
       body: Container(
         child: Column(
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(hintText: 'Search an image'),
+            Container(
+              decoration: BoxDecoration(
+                color: Color(0xFFF5F5F5),
+                borderRadius: BorderRadius.circular(30)
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              margin: EdgeInsets.symmetric(horizontal: 24),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(hintText: 'Search an image'),
+                    ),
                   ),
-                ),
-                Icon(Icons.search)
-              ],
-            )
+                  Icon(Icons.search)
+                ],
+              ),
+            ) 
           ],
         ),
       ),
