@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:wall_pixel/data/data.dart';
-import 'package:wall_pixel/model/categories.dart';
 import 'package:wall_pixel/model/wallpaper.dart';
+import 'package:wall_pixel/views/imageView.dart';
+import 'package:wall_pixel/views/search.dart';
 import 'package:wall_pixel/widgets/widget.dart';
 import 'package:http/http.dart' as http;
 
@@ -12,8 +12,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<CategoriesModel> categories = new List();
   List<WallpaperModel> wallpaperData = new List();
+
+  TextEditingController searchController = new TextEditingController();
 
   getTrendingPhotos() async {
     var res = await http.get(
@@ -33,8 +34,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    categories = getCategories();
-
     getTrendingPhotos();
     super.initState();
   }
@@ -61,31 +60,29 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Expanded(
                       child: TextField(
+                        controller: searchController,
                         decoration: InputDecoration(
                             hintText: 'Search an image',
                             border: InputBorder.none),
                       ),
                     ),
-                    Icon(Icons.search)
+                    InkWell(
+                      child: Container(
+                        child: Icon(Icons.search),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Search(
+                              query: searchController.text,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ],
                 ),
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              Container(
-                height: 50,
-                padding: EdgeInsets.symmetric(horizontal: 24),
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: categories.length,
-                    itemBuilder: (context, index) {
-                      return CategoriesTile(
-                        title: categories[index].categoriesName,
-                        imageUrl: categories[index].imageUrl,
-                      );
-                    }),
               ),
               SizedBox(
                 height: 10,
@@ -94,41 +91,6 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class CategoriesTile extends StatelessWidget {
-  final String imageUrl, title;
-
-  CategoriesTile({@required this.imageUrl, @required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(right: 4),
-      child: Stack(
-        children: [
-          ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                imageUrl,
-                width: 100,
-                height: 50,
-                fit: BoxFit.cover,
-              )),
-          Container(
-            width: 100,
-            height: 50,
-            alignment: Alignment.center,
-            child: Text(
-              title,
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-            ),
-          )
-        ],
       ),
     );
   }
